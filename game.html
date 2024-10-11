@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Tic Tac Toe - Game</title>
+    <!-- Viewport Meta Tag for Mobile Responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Font for Futuristic Look -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -11,15 +13,20 @@
             margin: 0;
             padding: 0;
             font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 600% 600%;
-            animation: GradientAnimation 20s ease infinite;
             min-height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
             flex-direction: column;
+            overflow: hidden;
+            /* Animated Gradient Background */
+            background: linear-gradient(270deg, #ff00ff, #00ffff, #ff00ff);
+            background-size: 600% 600%;
+            animation: GradientAnimation 15s ease infinite;
+            /* Ensure the body takes up the full viewport height */
+            min-height: 100vh;
         }
 
         @keyframes GradientAnimation {
@@ -31,18 +38,18 @@
         /* Container */
         .container {
             background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            padding: 5%;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
             text-align: center;
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        /* Animated Border */
+        /* Animated Shiny Borders */
         .container::before {
             content: '';
             position: absolute;
@@ -50,24 +57,24 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff0000);
-            animation: rotateGradient 10s linear infinite;
+            background: linear-gradient(45deg, #ffffff, #ffffff, #ffffff);
+            animation: shine 3s linear infinite;
             z-index: -1;
             opacity: 0.3;
         }
 
-        @keyframes rotateGradient {
+        @keyframes shine {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         /* Buttons */
         button {
-            padding: 12px 20px;
+            padding: 12px 25px;
             margin-top: 20px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             color: #fff;
@@ -92,30 +99,33 @@
         /* Game Header */
         #gameHeader {
             margin-bottom: 20px;
-            font-size: 28px;
+            font-size: 2rem;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         /* Game Grid */
         .grid {
             display: grid;
-            gap: 10px;
+            gap: 15px;
             margin: 20px auto;
-            width: fit-content;
+            width: 100%;
+            max-width: 500px;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(80px, 1fr));
         }
 
         .cell {
-            width: 80px;
-            height: 80px;
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            position: relative;
             background: #fff;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
+            font-size: 3rem;
             font-weight: bold;
             cursor: pointer;
-            position: relative;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -123,6 +133,13 @@
         .cell:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255,255,255,0.8);
+        }
+
+        .cell span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         /* X and O Styles */
@@ -165,7 +182,7 @@
             text-align: center;
             position: relative;
             width: 80%;
-            max-width: 300px;
+            max-width: 350px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
@@ -173,7 +190,7 @@
             margin-top: 20px;
             background: #28a745;
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 1.1rem;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -188,19 +205,37 @@
 
         /* Responsive Design */
         @media (max-width: 600px) {
+            .container {
+                padding: 3%;
+            }
+
             #gameHeader {
-                font-size: 22px;
+                font-size: 1.8rem;
+            }
+
+            .grid {
+                max-width: 100%;
+                gap: 10px;
             }
 
             .cell {
-                width: 60px;
-                height: 60px;
-                font-size: 30px;
+                font-size: 2.5rem;
             }
 
             button {
-                font-size: 14px;
-                padding: 10px 16px;
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            .popup-content {
+                padding: 20px;
+                width: 90%;
+                max-width: 250px;
+            }
+
+            .popup-content button {
+                font-size: 1rem;
+                padding: 8px 16px;
             }
         }
     </style>
@@ -252,7 +287,7 @@
             if (mode === 'player') {
                 header.innerText = `${player1} (X) vs ${player2} (O)`;
             } else {
-                header.innerText = `${player1} (X) vs ${player2} (${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)})`;
+                header.innerText = `${player1} (X) vs ${player2} (${capitalizeFirstLetter(difficulty)})`;
             }
         }
 
@@ -260,8 +295,10 @@
         function createGrid() {
             const gameGrid = document.getElementById('gameGrid');
             gameGrid.innerHTML = '';
-            gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 80px)`;
-            gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 80px)`;
+            // Adjust grid cell size based on grid size
+            let cellSize = gridSize === 3 ? '100px' : '80px';
+            gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+            gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
 
             for (let i = 0; i < gridSize * gridSize; i++) {
                 const cell = document.createElement('div');
@@ -308,7 +345,7 @@
             board[index] = player;
             const cell = document.querySelector(`.cell[data-index='${index}']`);
             cell.classList.add(player === 'X' ? 'x' : 'o');
-            cell.innerText = player;
+            cell.innerHTML = `<span>${player}</span>`;
         }
 
         // Function for computer to make a move based on difficulty
@@ -325,7 +362,8 @@
                 move = findBestMove('O') || findBestMove('X') || available[Math.floor(Math.random() * available.length)];
             } else if (difficulty === 'hard') {
                 // Perfect play using Minimax
-                move = findBestMove('O') || available[Math.floor(Math.random() * available.length)];
+                let bestMove = minimax(board, 'O');
+                move = bestMove.index;
             }
 
             makeMove(move, 'O');
@@ -361,6 +399,75 @@
                 }
             }
             return null;
+        }
+
+        // Minimax Algorithm for Hard Difficulty
+        function minimax(newBoard, player) {
+            let availSpots = newBoard.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+
+            if (checkWinPlayer('X', newBoard)) {
+                return { score: -10 };
+            } else if (checkWinPlayer('O', newBoard)) {
+                return { score: 10 };
+            } else if (availSpots.length === 0) {
+                return { score: 0 };
+            }
+
+            let moves = [];
+
+            for (let i = 0; i < availSpots.length; i++) {
+                let move = {};
+                move.index = availSpots[i];
+                newBoard[availSpots[i]] = player;
+
+                if (player === 'O') {
+                    let result = minimax(newBoard, 'X');
+                    move.score = result.score;
+                } else {
+                    let result = minimax(newBoard, 'O');
+                    move.score = result.score;
+                }
+
+                newBoard[availSpots[i]] = '';
+                moves.push(move);
+            }
+
+            let bestMove;
+            if(player === 'O') {
+                let bestScore = -Infinity;
+                for(let i = 0; i < moves.length; i++) {
+                    if(moves[i].score > bestScore) {
+                        bestScore = moves[i].score;
+                        bestMove = i;
+                    }
+                }
+            } else {
+                let bestScore = Infinity;
+                for(let i = 0; i < moves.length; i++) {
+                    if(moves[i].score < bestScore) {
+                        bestScore = moves[i].score;
+                        bestMove = i;
+                    }
+                }
+            }
+
+            return moves[bestMove];
+        }
+
+        // Function to check if a player has won (used in Minimax)
+        function checkWinPlayer(player, currentBoard) {
+            const winConditions = getWinConditions();
+            for (let condition of winConditions) {
+                let win = true;
+                for (let index of condition) {
+                    if (currentBoard[index] !== player) {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win) return true;
+            }
+            return false;
         }
 
         // Function to check win conditions
@@ -454,8 +561,12 @@
                 sound.play();
             }
         }
+
+        // Utility function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
     </script>
 
 </body>
 </html>
-

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Tic Tac Toe - Select Difficulty</title>
+    <!-- Viewport Meta Tag for Mobile Responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Font for Futuristic Look -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -11,14 +13,19 @@
             margin: 0;
             padding: 0;
             font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 600% 600%;
-            animation: GradientAnimation 20s ease infinite;
             height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
+            overflow: hidden;
+            /* Animated Gradient Background */
+            background: linear-gradient(270deg, #ff00ff, #00ffff, #ff00ff);
+            background-size: 600% 600%;
+            animation: GradientAnimation 15s ease infinite;
+            /* Ensure the body takes up the full viewport height */
+            min-height: 100vh;
         }
 
         @keyframes GradientAnimation {
@@ -30,18 +37,18 @@
         /* Container */
         .container {
             background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            padding: 5%;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        /* Animated Border */
+        /* Animated Shiny Borders */
         .container::before {
             content: '';
             position: absolute;
@@ -49,13 +56,13 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff0000);
-            animation: rotateGradient 10s linear infinite;
+            background: linear-gradient(45deg, #ffffff, #ffffff, #ffffff);
+            animation: shine 3s linear infinite;
             z-index: -1;
             opacity: 0.3;
         }
 
-        @keyframes rotateGradient {
+        @keyframes shine {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
@@ -63,18 +70,18 @@
         /* Buttons */
         button {
             padding: 15px 25px;
-            margin: 15px;
+            margin: 10px 0;
             border: none;
-            border-radius: 8px;
-            font-size: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             color: #fff;
             background: linear-gradient(45deg, #ff00ff, #00ffff);
             background-size: 200% 200%;
             animation: ButtonGradient 5s ease infinite;
-            width: 80%;
-            max-width: 250px;
+            width: 100%;
+            max-width: 300px;
         }
 
         @keyframes ButtonGradient {
@@ -90,19 +97,24 @@
 
         /* Heading */
         h2 {
-            margin-bottom: 30px;
-            font-size: 32px;
+            margin-bottom: 20px;
+            font-size: 2rem;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         /* Responsive Design */
-        @media (max-width: 600px) {
+        @media (max-width: 400px) {
+            .container {
+                padding: 30px;
+            }
+
             h2 {
-                font-size: 24px;
+                font-size: 1.8rem;
+                margin-bottom: 15px;
             }
 
             button {
-                font-size: 16px;
+                font-size: 1rem;
                 padding: 12px 20px;
             }
         }
@@ -118,7 +130,7 @@
         <button onclick="selectDifficulty('hard')">Hard</button>
     </div>
 
-    <!-- Audio Element -->
+    <!-- Audio Elements -->
     <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 
     <script>
