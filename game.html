@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe - Game</title>
+    <!-- Google Font for Futuristic Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 600% 600%;
+            animation: GradientAnimation 20s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            flex-direction: column;
+        }
+
+        @keyframes GradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Border */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff0000);
+            animation: rotateGradient 10s linear infinite;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Buttons */
+        button {
+            padding: 12px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: #fff;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-size: 200% 200%;
+            animation: ButtonGradient 5s ease infinite;
+            width: 50%;
+            max-width: 200px;
+        }
+
+        @keyframes ButtonGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Game Header */
+        #gameHeader {
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Game Grid */
+        .grid {
+            display: grid;
+            gap: 10px;
+            margin: 20px auto;
+            width: fit-content;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255,255,255,0.8);
+        }
+
+        /* X and O Styles */
+        .x {
+            color: blue;
+            animation: RGBEffect 3s infinite;
+        }
+
+        .o {
+            color: red;
+            animation: RGBEffect 3s infinite;
+        }
+
+        @keyframes RGBEffect {
+            0% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(360deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
+
+        /* Popup */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            display: none;
+        }
+
+        .popup-content {
+            background: #222;
+            color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            width: 80%;
+            max-width: 300px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .popup-content button {
+            margin-top: 20px;
+            background: #28a745;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .popup-content button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            #gameHeader {
+                font-size: 22px;
+            }
+
+            .cell {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Game Container -->
+    <div class="container">
+        <h2 id="gameHeader">Tic Tac Toe</h2>
+        <div id="gameGrid" class="grid"></div>
+        <button onclick="restartGame()">Restart</button>
+    </div>
+
+    <!-- Popup Section -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2 id="popupMessage">Player X Wins!</h2>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+    <audio id="winSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+
+    <script>
+        // State Variables
+        let mode = localStorage.getItem('gameMode') || 'computer'; // 'computer' or 'player'
+        let player1 = localStorage.getItem('player1') || 'Player 1';
+        let player2 = localStorage.getItem('player2') || (mode === 'computer' ? 'Computer' : 'Player 2');
+        let gridSize = parseInt(localStorage.getItem('gridSize')) || 3;
+        let difficulty = localStorage.getItem('difficulty') || 'easy'; // 'easy', 'medium', 'hard'
+        let currentPlayer = 'X';
+        let board = Array(gridSize * gridSize).fill('');
+        let gameActive = true;
+
+        // Initialize Game on Page Load
+        window.onload = function() {
+            updateGameHeader();
+            createGrid();
+            if (mode === 'computer' && currentPlayer === 'O') {
+                setTimeout(computerMove, 500);
+            }
+        };
+
+        // Function to update the game header with player names and symbols
+        function updateGameHeader() {
+            const header = document.getElementById('gameHeader');
+            if (mode === 'player') {
+                header.innerText = `${player1} (X) vs ${player2} (O)`;
+            } else {
+                header.innerText = `${player1} (X) vs ${player2} (${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)})`;
+            }
+        }
+
+        // Function to create the game grid based on selected grid size
+        function createGrid() {
+            const gameGrid = document.getElementById('gameGrid');
+            gameGrid.innerHTML = '';
+            gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 80px)`;
+            gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 80px)`;
+
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.setAttribute('data-index', i);
+                cell.addEventListener('click', handleCellClick);
+                gameGrid.appendChild(cell);
+            }
+        }
+
+        // Function to handle cell clicks
+        function handleCellClick(e) {
+            const index = e.target.getAttribute('data-index');
+            if (board[index] !== '' || !gameActive) return;
+
+            playSound('clickSound');
+            makeMove(index, currentPlayer);
+
+            if (checkWin(currentPlayer)) {
+                gameActive = false;
+                showPopup(`${currentPlayer === 'X' ? player1 : player2} Wins!`);
+                playSound('winSound');
+                return;
+            }
+
+            if (board.every(cell => cell !== '')) {
+                gameActive = false;
+                showPopup(`It's a Draw!`);
+                playSound('winSound');
+                return;
+            }
+
+            // Switch Player
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+            // If playing against computer and it's computer's turn
+            if (mode === 'computer' && currentPlayer === 'O' && gameActive) {
+                setTimeout(computerMove, 500);
+            }
+        }
+
+        // Function to make a move
+        function makeMove(index, player) {
+            board[index] = player;
+            const cell = document.querySelector(`.cell[data-index='${index}']`);
+            cell.classList.add(player === 'X' ? 'x' : 'o');
+            cell.innerText = player;
+        }
+
+        // Function for computer to make a move based on difficulty
+        function computerMove() {
+            let available = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+            if (available.length === 0 || !gameActive) return;
+
+            let move;
+            if (difficulty === 'easy') {
+                // Random move
+                move = available[Math.floor(Math.random() * available.length)];
+            } else if (difficulty === 'medium') {
+                // Attempt to win or block
+                move = findBestMove('O') || findBestMove('X') || available[Math.floor(Math.random() * available.length)];
+            } else if (difficulty === 'hard') {
+                // Perfect play using Minimax
+                move = findBestMove('O') || available[Math.floor(Math.random() * available.length)];
+            }
+
+            makeMove(move, 'O');
+
+            if (checkWin('O')) {
+                gameActive = false;
+                showPopup(`${player2} Wins!`);
+                playSound('winSound');
+                return;
+            }
+
+            if (board.every(cell => cell !== '')) {
+                gameActive = false;
+                showPopup(`It's a Draw!`);
+                playSound('winSound');
+                return;
+            }
+
+            // Switch back to Player X
+            currentPlayer = 'X';
+        }
+
+        // Function to find the best move for a player (used in Medium and Hard difficulties)
+        function findBestMove(player) {
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                if (board[i] === '') {
+                    board[i] = player;
+                    if (checkWin(player)) {
+                        board[i] = '';
+                        return i;
+                    }
+                    board[i] = '';
+                }
+            }
+            return null;
+        }
+
+        // Function to check win conditions
+        function checkWin(player) {
+            const winConditions = getWinConditions();
+
+            for (let condition of winConditions) {
+                let win = true;
+                for (let index of condition) {
+                    if (board[index] !== player) {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win) return true;
+            }
+            return false;
+        }
+
+        // Function to get all possible win conditions based on grid size
+        function getWinConditions() {
+            let conditions = [];
+
+            // Rows
+            for (let r = 0; r < gridSize; r++) {
+                let row = [];
+                for (let c = 0; c < gridSize; c++) {
+                    row.push(r * gridSize + c);
+                }
+                conditions.push(row);
+            }
+
+            // Columns
+            for (let c = 0; c < gridSize; c++) {
+                let col = [];
+                for (let r = 0; r < gridSize; r++) {
+                    col.push(r * gridSize + c);
+                }
+                conditions.push(col);
+            }
+
+            // Diagonals
+            let diag1 = [];
+            let diag2 = [];
+            for (let i = 0; i < gridSize; i++) {
+                diag1.push(i * gridSize + i);
+                diag2.push(i * gridSize + (gridSize - i - 1));
+            }
+            conditions.push(diag1);
+            conditions.push(diag2);
+
+            return conditions;
+        }
+
+        // Function to show popup with message
+        function showPopup(message) {
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popupMessage');
+            popupMessage.innerText = message;
+            popup.style.display = 'flex';
+        }
+
+        // Function to close popup and reset the game
+        function closePopup() {
+            playSound('clickSound');
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+            resetGame();
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            // Clear the board
+            board = Array(gridSize * gridSize).fill('');
+            gameActive = true;
+            currentPlayer = 'X';
+            updateGameHeader();
+            createGrid();
+        }
+
+        // Function to restart the game by going back to grid selection
+        function restartGame() {
+            window.location.href = 'gridSelection.html';
+        }
+
+        // Function to play sound
+        function playSound(id) {
+            const sound = document.getElementById(id);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play();
+            }
+        }
+    </script>
+
+</body>
+</html>
+
